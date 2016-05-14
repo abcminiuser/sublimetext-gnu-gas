@@ -1,0 +1,99 @@
+%YAML 1.2
+---
+
+
+# Generic GNU GAS Sublime Text 3 syntax
+# By Dean Camera, dean [at] fourwalledcubicle [dot] com
+
+
+file_extensions:
+  - lss
+scope: source.gaslisting
+
+variables:
+  # Hex digit, case-insensitive
+  hex_digit: '[0-9a-fA-F]'
+
+contexts:
+  main:
+    # C-like comments, full line
+    - match: '//'
+      scope: punctuation.definition.comment.gaslisting
+      push: line_comment
+
+    # C-like comments, multi-line
+    - match: '/\*'
+      scope: punctuation.definition.comment.gaslisting
+      push: multi_line_comment
+
+    # Line numbers, followed by an instruction
+    - match: '\b{{hex_digit}}+:'
+      push: line_number
+
+    # Line numbers, followed by a symbol name
+    - match: '^\b{{hex_digit}}+\b'
+      scope: constant.numeric.gaslisting
+      push: line_ident
+
+  line_ident:
+    # Start of symbol name
+    - match: "<"
+      scope: entity.name.name.begin.gaslisting
+      push: symbol_tag
+
+    # End of line (error condition)
+    - match: $
+      pop: true
+
+  line_number:
+    # Tab separator, start of the instruction encoding
+    - meta_scope: constant.numeric.gaslisting
+    - match: '\t'
+      push: instruction_encoding
+
+    # End of line (error condition)
+    - match: $
+      pop: true
+
+  instruction_encoding:
+    # Tab separator, start of the instruction mnemonic
+    - meta_scope: keyword.gaslisting
+    - match: "\t"
+      push: instruction_name
+
+    # End of line (error condition)
+    - match: $
+      pop: true
+
+  instruction_name:
+    # Start of GAS comment
+    - meta_scope: string.gaslisting
+    - match: ";"
+      push: line_comment
+
+    # End of line
+    - match: $
+      pop: true
+
+  symbol_tag:
+    # End of symbol name
+    - meta_scope: entity.name.gaslisting
+    - match: ">"
+      scope: entity.name.end
+      pop: true
+
+    # End of line (error condition)
+    - match: $
+      pop: true
+
+  line_comment:
+    # End of line
+    - meta_scope: comment.line.gaslisting
+    - match: $
+      pop: true
+
+  multi_line_comment:
+    # End of comment
+    - meta_scope: comment.line.gaslisting
+    - match: \*/
+      pop: true
