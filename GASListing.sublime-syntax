@@ -56,9 +56,10 @@ contexts:
       pop: true
 
   instruction_encoding:
-    # Tab separator, start of the instruction mnemonic
+    # Tab separator or double space, start of the instruction mnemonic/ASCII
+    # data dump
     - meta_scope: keyword.gaslisting
-    - match: "\t"
+    - match: "(\t|  )"
       push: instruction_name
 
     # End of line (error condition)
