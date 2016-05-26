@@ -16,6 +16,11 @@ variables:
 
 contexts:
   main:
+    # GAS comments, full line
+    - match: ';'
+      scope: punctuation.definition.comment.gaslisting
+      push: line_comment
+
     # C-like comments, full line
     - match: '//'
       scope: punctuation.definition.comment.gaslisting
