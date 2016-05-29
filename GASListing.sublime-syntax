@@ -51,8 +51,9 @@ contexts:
       pop: true
 
   line_number:
-    # Tab separator, start of the instruction encoding
     - meta_scope: constant.numeric.gaslisting
+
+    # Tab separator, start of the instruction encoding
     - match: '\t'
       push: instruction_encoding
 
@@ -61,9 +62,10 @@ contexts:
       pop: true
 
   instruction_encoding:
+    - meta_scope: keyword.gaslisting
+
     # Tab separator or double space, start of the instruction mnemonic/ASCII
     # data dump
-    - meta_scope: keyword.gaslisting
     - match: "(\t|  )"
       push: instruction_name
 
@@ -72,9 +74,15 @@ contexts:
       pop: true
 
   instruction_name:
-    # Start of GAS comment
     - meta_scope: string.gaslisting
+
+    # Start of GAS comment
     - match: ";"
+      push: line_comment
+
+    # Start of C-like comment
+    - match: '//'
+      scope: punctuation.definition.comment.gaslisting
       push: line_comment
 
     # End of line
@@ -82,8 +90,9 @@ contexts:
       pop: true
 
   symbol_tag:
-    # End of symbol name
     - meta_scope: entity.name.gaslisting
+
+    # End of symbol name
     - match: ">"
       scope: entity.name.end
       pop: true
@@ -93,13 +102,15 @@ contexts:
       pop: true
 
   line_comment:
-    # End of line
     - meta_scope: comment.line.gaslisting
+
+    # End of line
     - match: $
       pop: true
 
   multi_line_comment:
-    # End of comment
     - meta_scope: comment.line.gaslisting
+
+    # End of comment
     - match: \*/
       pop: true
