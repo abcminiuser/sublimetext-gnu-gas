@@ -18,4 +18,4 @@ Patches and issue reports welcome!
 
 # License
 
-See [license information here](LICENCE.txt).
+See [license information here](LICENSE.txt).
